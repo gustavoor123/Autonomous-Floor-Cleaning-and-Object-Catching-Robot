@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ros2_control for Gazebo Harmonic (gz_ros2_control) -->
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>ign_ros2_control/IgnitionSystem</plugin>
+    </hardware>
+
+    <joint name="left_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+
+    <joint name="right_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Load gz_ros2_control plugin in Gazebo -->
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so"
+            name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <!-- Use package-relative path so it works after rebuilds -->
+      <parameters>$(find my_bot)/config/gazebo_controllers.yaml</parameters>
+      <controller name="joint_state_broadcaster">
+        <start>true</start>
+      </controller>
+      <controller name="diff_drive_base_controller">
+        <start>true</start>
+      </controller>
+    </plugin>
+  </gazebo>
+
+</robot>
